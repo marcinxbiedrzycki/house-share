@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ApiResource()
@@ -19,15 +21,15 @@ class User implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="uuid", length=180, unique=true)
      */
     private UuidInterface $uuid;
 
     /**
-     * @ORM\Column(type="string", length=180)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
     private string $name;
 
@@ -40,23 +42,16 @@ class User implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUuid(): ?string
+    public function getUuid(): UuidInterface
     {
         return $this->uuid;
-    }
-
-    public function setUuid(string $uuid): self
-    {
-        $this->uuid = $uuid;
-
-        return $this;
     }
 
     /**
@@ -66,7 +61,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->uuid;
+        return $this->name;
     }
 
     /**
