@@ -16,8 +16,7 @@ if [[ ! -f "$JWT_SECRET_KEY" ]]; then
   openssl pkey -in "$JWT_SECRET_KEY" -out "$JWT_PUBLIC_KEY" -pubout -passin pass:"$JWT_PASSPHRASE"
 fi
 
-bin/console doctrine:migrations:migrate --no-interaction
-if [[ $(mysql -uroot -p12345 -hmysql playthepage -sse "select count(*) from users;") -eq 0 ]]; then
+if [[ $(mysql -uroot -ppassword -hdatabase house -sse "select count(*) from users;") -eq 0 ]]; then
     bin/console doctrine:fixtures:load --no-interaction
 fi
 
