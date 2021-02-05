@@ -24,13 +24,25 @@ class House
      */
     private string $name;
 
-    private float $price;
+    /**
+     * @ORM\Column(type="float")
+     */
+    private float $price = 0;
 
-    private \DateTimeImmutable $dateFrom;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?\DateTimeImmutable $dateFrom = null;
 
-    private \DateTimeImmutable $dateTo;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?\DateTimeImmutable $dateTo = null;
 
-    private bool $isVisible;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private bool $isVisible = false;
 
     private User $owner;
 
@@ -75,9 +87,9 @@ class House
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return \DateTimeImmutable|null
      */
-    public function getDateFrom(): \DateTimeImmutable
+    public function getDateFrom(): ?\DateTimeImmutable
     {
         return $this->dateFrom;
     }
@@ -91,9 +103,9 @@ class House
     }
 
     /**
-     * @return \DateTimeImmutable
+     * @return \DateTimeImmutable|null
      */
-    public function getDateTo(): \DateTimeImmutable
+    public function getDateTo(): ?\DateTimeImmutable
     {
         return $this->dateTo;
     }
