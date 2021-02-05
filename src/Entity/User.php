@@ -7,6 +7,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -28,10 +29,32 @@ class User implements UserInterface
      */
     private UuidInterface $uuid;
 
+    public function __construct()
+    {
+        $this->uuid = Uuid::uuid4();
+        $this->addRole('ROLE_USER');
+    }
+
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private string $name;
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
 
     /**
      * @ORM\Column(type="json")
@@ -47,11 +70,6 @@ class User implements UserInterface
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUuid(): UuidInterface
-    {
-        return $this->uuid;
     }
 
     /**
@@ -76,11 +94,21 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    public function addRole(string $role): void
     {
-        $this->roles = $roles;
+        $role = strtoupper($role);
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+    }
 
-        return $this;
+    public function removeRole(string $role): void
+    {
+        $key = array_search(strtoupper($role), $this->roles, true);
+        if ($key !== false) {
+            unset($this->roles[$key]);
+            $this->roles = array_values($this->roles);
+        }
     }
 
     /**
@@ -93,7 +121,7 @@ class User implements UserInterface
 
     public function setPassword(string $password): self
     {
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_ARGON2I);
 
         return $this;
     }

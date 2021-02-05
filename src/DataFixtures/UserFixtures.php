@@ -20,7 +20,7 @@ class UserFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $manager->persist($this->createUser(Uuid::uuid4(), 'sample_user', 'secret_password'));
+        $manager->persist($this->createUser(Uuid::uuid4(), 'admin', 'admin'));
 
         $manager->flush();
     }

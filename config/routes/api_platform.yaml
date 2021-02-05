@@ -6,3 +6,7 @@ api_platform:
 authentication_token:
     path: /authentication_token
     methods: ['POST']
+
+add_user:
+    path: /users
+    methods: ['POST']
